@@ -7,36 +7,30 @@ const enforce = require('express-sslify');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
-// Load React App
-// Serve HTML file for production
-if (env.name === "production") {
-  app.get("*", function response(req, res) {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  });
-};
+
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(enforce.HTTPS({ trustProtoHeader: true}));
 app.use(cors());
-
+ 
 if (process.env.NODE_ENV === 'production') {
+  app.use(compression);
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client/build')));
-
+ 
   app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 }
-
+ 
 app.listen(port, error => {
   if (error) throw error;
-  console.log('Server running on port ' + port);
+  console.log('Server is running on port ' + port);
 });
 
 app.get('/service-worker.js' , (req,res) => {
