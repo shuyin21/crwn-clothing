@@ -7,6 +7,14 @@ const enforce = require('express-sslify');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
+// Load React App
+// Serve HTML file for production
+if (env.name === "production") {
+  app.get("*", function response(req, res) {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+};
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
