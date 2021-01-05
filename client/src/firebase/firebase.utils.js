@@ -13,7 +13,7 @@ const config= {
     measurementId: "G-M2BRKM76KS"
   };
 
-  firebase.initializeApp(config);
+ var firebaseApp= firebase.initializeApp(config);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
@@ -81,6 +81,12 @@ export const getCurrentUser = () => {
     }, reject);
   });
 };
+
+var db = firebaseApp.firestore();
+
+export {db};
+
+
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
